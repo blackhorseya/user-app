@@ -11,6 +11,13 @@ http:
 db:
   url: "mongodb://user-app:changeme@localhost:27017/user-db?connect=direct&authSource=admin"
 
+authenticator:
+  domain: "seanzheng.us.auth0.com"
+  clientID: "af1ZvowUAmDtIfmHFQM45WZBNI3mvEIo"
+  clientSecret: "n4s6TnwFQEAC24xkIvgKDiCFArdiPXxhJKXa5SqeMNA8b1dSdNqUceej3JettLKW"
+  endpoint: ""
+  callbackURL: "http://localhost:8080/api/v1/auth/callback"
+
 log:
   encoding: console
   level: debug

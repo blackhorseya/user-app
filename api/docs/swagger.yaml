@@ -8,6 +8,19 @@ definitions:
       msg:
         type: string
     type: object
+  pb.Profile:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      picture:
+        type: string
+      token:
+        type: string
+    type: object
   response.Response:
     properties:
       code:
@@ -76,6 +89,87 @@ paths:
       summary: Readiness
       tags:
       - Health
+  /v1/auth/callback:
+    get:
+      consumes:
+      - application/json
+      description: Callback after login
+      produces:
+      - application/json
+      responses:
+        "307":
+          description: Temporary Redirect
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.APPError'
+      summary: Callback after login
+      tags:
+      - Auth
+  /v1/auth/login:
+    get:
+      consumes:
+      - application/json
+      description: Get login url
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.APPError'
+      summary: Get login url
+      tags:
+      - Auth
+  /v1/auth/me:
+    get:
+      consumes:
+      - application/json
+      description: Get me information
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/pb.Profile'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/er.APPError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/er.APPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/er.APPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.APPError'
+      security:
+      - Bearer: []
+      summary: Get me information
+      tags:
+      - Auth
 securityDefinitions:
   Bearer:
     in: header
