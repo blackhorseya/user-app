@@ -1,0 +1,11 @@
+app:
+  name: "user-app"
+  env: "local"
+
+http:
+  port: 8080
+  mode: debug
+
+log:
+  encoding: console
+  level: debug

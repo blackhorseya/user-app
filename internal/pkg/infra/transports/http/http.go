@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/blackhorseya/gocommon/pkg/contextx"
+	"github.com/blackhorseya/gocommon/pkg/ginhttp"
 	"github.com/blackhorseya/gocommon/pkg/utils/netutil"
 	"github.com/gin-contrib/static"
 	ginzap "github.com/gin-contrib/zap"
@@ -57,9 +58,12 @@ func NewRouter(o *Options, logger *zap.Logger, init InitHandlers) *gin.Engine {
 
 	r := gin.New()
 
+	r.Use(ginhttp.AddCors())
 	r.Use(gin.Recovery())
 	r.Use(ginzap.Ginzap(logger, time.RFC3339, true))
 	r.Use(ginzap.RecoveryWithZap(logger, true))
+	r.Use(ginhttp.AddContextx())
+	r.Use(ginhttp.HandleError())
 
 	r.Use(static.Serve("/", static.LocalFile("./web/build", true)))
 
