@@ -116,7 +116,8 @@ fabric.properties
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -209,6 +210,6 @@ $RECYCLE.BIN/
 ## Go
 
 ## Code coverage
-converage.txt
+coverage.txt
 profile.out
 
