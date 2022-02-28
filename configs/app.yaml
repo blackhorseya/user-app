@@ -6,6 +6,9 @@ http:
   port: 8080
   mode: debug
 
+db:
+  url: "mongodb://user-app:changeme@localhost:27017/user-db?connect=direct&authSource=admin"
+
 log:
   encoding: console
   level: debug
