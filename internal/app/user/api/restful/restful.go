@@ -1,6 +1,7 @@
 package restful
 
 import (
+	"github.com/blackhorseya/user-app/internal/app/user/api/restful/health"
 	"github.com/blackhorseya/user-app/internal/pkg/infra/transports/http"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
@@ -12,16 +13,12 @@ import (
 )
 
 // CreateInitHandlerFn serve caller to create init handler
-func CreateInitHandlerFn() http.InitHandlers {
+func CreateInitHandlerFn(healthH health.IHandler) http.InitHandlers {
 	return func(r *gin.Engine) {
 		api := r.Group("api")
 		{
-			api.GET("readiness", func(c *gin.Context) {
-				c.JSON(200, gin.H{"msg": "ok"})
-			})
-			api.GET("liveness", func(c *gin.Context) {
-				c.JSON(200, gin.H{"msg": "ok"})
-			})
+			api.GET("readiness", healthH.Readiness)
+			api.GET("liveness", healthH.Liveness)
 
 			// open any environments can access swagger
 			api.GET("docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -31,5 +28,6 @@ func CreateInitHandlerFn() http.InitHandlers {
 
 // ProviderSet is an apis provider set
 var ProviderSet = wire.NewSet(
+	health.ProviderSet,
 	CreateInitHandlerFn,
 )

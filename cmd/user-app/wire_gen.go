@@ -11,6 +11,7 @@ import (
 	"github.com/blackhorseya/gocommon/pkg/log"
 	"github.com/blackhorseya/user-app/internal/app/user"
 	"github.com/blackhorseya/user-app/internal/app/user/api/restful"
+	"github.com/blackhorseya/user-app/internal/app/user/api/restful/health"
 	"github.com/blackhorseya/user-app/internal/pkg/app"
 	"github.com/blackhorseya/user-app/internal/pkg/infra/databases"
 	"github.com/blackhorseya/user-app/internal/pkg/infra/transports/http"
@@ -40,7 +41,8 @@ func CreateApp(path2 string) (*app.Application, error) {
 	if err != nil {
 		return nil, err
 	}
-	initHandlers := restful.CreateInitHandlerFn()
+	iHandler := health.NewImpl(logger)
+	initHandlers := restful.CreateInitHandlerFn(iHandler)
 	engine := http.NewRouter(httpOptions, logger, initHandlers)
 	server, err := http.New(httpOptions, logger, engine)
 	if err != nil {
