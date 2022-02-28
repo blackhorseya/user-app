@@ -4,6 +4,7 @@ go 1.17
 
 require (
 	github.com/blackhorseya/gocommon v0.0.0-20220228071850-a2cf885d1c80
+	github.com/coreos/go-oidc/v3 v3.1.0
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-contrib/zap v0.0.2
 	github.com/gin-gonic/gin v1.7.7
@@ -13,6 +14,7 @@ require (
 	github.com/spf13/viper v1.10.1
 	go.mongodb.org/mongo-driver v1.8.3
 	go.uber.org/zap v1.21.0
+	golang.org/x/oauth2 v0.0.0-20220223155221-ee480838109b
 	google.golang.org/protobuf v1.27.1
 )
 
@@ -76,7 +78,9 @@ require (
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	golang.org/x/sys v0.0.0-20220227234510-4e6760a101f9 // indirect
 	golang.org/x/text v0.3.7 // indirect
+	google.golang.org/appengine v1.6.7 // indirect
 	gopkg.in/ini.v1 v1.66.4 // indirect
+	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )

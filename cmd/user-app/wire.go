@@ -10,6 +10,7 @@ import (
 	"github.com/blackhorseya/user-app/internal/app/user/api/restful"
 	"github.com/blackhorseya/user-app/internal/app/user/biz"
 	"github.com/blackhorseya/user-app/internal/pkg/app"
+	"github.com/blackhorseya/user-app/internal/pkg/infra/authenticator"
 	"github.com/blackhorseya/user-app/internal/pkg/infra/databases"
 	"github.com/blackhorseya/user-app/internal/pkg/infra/jwt"
 	"github.com/blackhorseya/user-app/internal/pkg/infra/transports/http"
@@ -23,6 +24,7 @@ var providerSet = wire.NewSet(
 	http.ProviderSet,
 	databases.ProviderSet,
 	jwt.ProviderSet,
+	authenticator.ProviderSet,
 	restful.ProviderSet,
 	biz.ProviderSet,
 )
