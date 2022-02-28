@@ -11,7 +11,10 @@ import (
 	"github.com/blackhorseya/gocommon/pkg/log"
 	"github.com/blackhorseya/user-app/internal/app/user"
 	"github.com/blackhorseya/user-app/internal/app/user/api/restful"
-	"github.com/blackhorseya/user-app/internal/app/user/api/restful/health"
+	health2 "github.com/blackhorseya/user-app/internal/app/user/api/restful/health"
+	"github.com/blackhorseya/user-app/internal/app/user/biz"
+	"github.com/blackhorseya/user-app/internal/app/user/biz/health"
+	"github.com/blackhorseya/user-app/internal/app/user/biz/health/repo"
 	"github.com/blackhorseya/user-app/internal/pkg/app"
 	"github.com/blackhorseya/user-app/internal/pkg/infra/databases"
 	"github.com/blackhorseya/user-app/internal/pkg/infra/jwt"
@@ -42,7 +45,17 @@ func CreateApp(path2 string) (*app.Application, error) {
 	if err != nil {
 		return nil, err
 	}
-	iHandler := health.NewImpl(logger)
+	databasesOptions, err := databases.NewOptions(viper, logger)
+	if err != nil {
+		return nil, err
+	}
+	client, err := databases.NewMongo(databasesOptions)
+	if err != nil {
+		return nil, err
+	}
+	iRepo := repo.NewImpl(logger, client)
+	iBiz := health.NewImpl(logger, iRepo)
+	iHandler := health2.NewImpl(logger, iBiz)
 	initHandlers := restful.CreateInitHandlerFn(iHandler)
 	engine := http.NewRouter(httpOptions, logger, initHandlers)
 	server, err := http.New(httpOptions, logger, engine)
@@ -58,4 +71,4 @@ func CreateApp(path2 string) (*app.Application, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(user.ProviderSet, config.ProviderSet, log.ProviderSet, http.ProviderSet, databases.ProviderSet, jwt.ProviderSet, restful.ProviderSet)
+var providerSet = wire.NewSet(user.ProviderSet, config.ProviderSet, log.ProviderSet, http.ProviderSet, databases.ProviderSet, jwt.ProviderSet, restful.ProviderSet, biz.ProviderSet)

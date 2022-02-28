@@ -92,4 +92,5 @@ up-local:
 	@docker-compose --file ./deployments/docker-compose.yaml --project-name $(APP_NAME) up -d
 
 .PHONY: down-local # docker-compose down local
+down-local:
 	@docker-compose --file ./deployments/docker-compose.yaml --project-name $(APP_NAME) down -v

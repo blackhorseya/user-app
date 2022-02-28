@@ -3,7 +3,9 @@ package health
 import (
 	"net/http"
 
+	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/blackhorseya/gocommon/pkg/response"
+	"github.com/blackhorseya/user-app/internal/app/user/biz/health"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 
@@ -13,12 +15,14 @@ import (
 
 type impl struct {
 	logger *zap.Logger
+	biz    health.IBiz
 }
 
 // NewImpl return IHandler
-func NewImpl(logger *zap.Logger) IHandler {
+func NewImpl(logger *zap.Logger, biz health.IBiz) IHandler {
 	return &impl{
 		logger: logger.With(zap.String("type", "health.restful")),
+		biz:    biz,
 	}
 }
 
@@ -28,11 +32,19 @@ func NewImpl(logger *zap.Logger) IHandler {
 // @Tags Health
 // @Accept application/json
 // @Produce application/json
-// @Success 200 {object} response.Response
+// @Success 200 {object} response.Response{data=string}
 // @Failure 500 {object} er.APPError
 // @Router /readiness [get]
 func (i *impl) Readiness(c *gin.Context) {
-	c.JSON(http.StatusOK, response.OK)
+	ctx := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)
+
+	err := i.biz.Readiness(ctx)
+	if err != nil {
+		_ = c.Error(err)
+		return
+	}
+
+	c.JSON(http.StatusOK, response.OK.WithData("success"))
 }
 
 // Liveness to know when to restart an application
@@ -41,9 +53,17 @@ func (i *impl) Readiness(c *gin.Context) {
 // @Tags Health
 // @Accept application/json
 // @Produce application/json
-// @Success 200 {object} response.Response
+// @Success 200 {object} response.Response{data=string}
 // @Failure 500 {object} er.APPError
 // @Router /liveness [get]
 func (i *impl) Liveness(c *gin.Context) {
-	c.JSON(http.StatusOK, response.OK)
+	ctx := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)
+
+	err := i.biz.Liveness(ctx)
+	if err != nil {
+		_ = c.Error(err)
+		return
+	}
+
+	c.JSON(http.StatusOK, response.OK.WithData("success"))
 }

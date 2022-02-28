@@ -8,6 +8,7 @@ import (
 	"github.com/blackhorseya/gocommon/pkg/log"
 	"github.com/blackhorseya/user-app/internal/app/user"
 	"github.com/blackhorseya/user-app/internal/app/user/api/restful"
+	"github.com/blackhorseya/user-app/internal/app/user/biz"
 	"github.com/blackhorseya/user-app/internal/pkg/app"
 	"github.com/blackhorseya/user-app/internal/pkg/infra/databases"
 	"github.com/blackhorseya/user-app/internal/pkg/infra/jwt"
@@ -23,6 +24,7 @@ var providerSet = wire.NewSet(
 	databases.ProviderSet,
 	jwt.ProviderSet,
 	restful.ProviderSet,
+	biz.ProviderSet,
 )
 
 func CreateApp(path string) (*app.Application, error) {
