@@ -86,3 +86,10 @@ deploy:
 	@helm -n $(NS) upgrade --install $(DEPLOY_TO)-$(RELEASE_NAME) \
 	$(HELM_REPO_NAME)/$(CHART_NAME) \
 	--set "image.tag=$(VERSION)" -f ./deployments/values/$(DEPLOY_TO)/values.yaml
+
+.PHONY: up-local # docker-compose up local
+up-local:
+	@docker-compose --file ./deployments/docker-compose.yaml --project-name $(APP_NAME) up -d
+
+.PHONY: down-local # docker-compose down local
+	@docker-compose --file ./deployments/docker-compose.yaml --project-name $(APP_NAME) down -v
