@@ -69,7 +69,15 @@ func CreateApp(path2 string) (*app.Application, error) {
 	if err != nil {
 		return nil, err
 	}
-	authIBiz := auth.NewImpl(logger, repoIRepo, authenticatorAuthenticator)
+	jwtOptions, err := jwt.NewOptions(viper)
+	if err != nil {
+		return nil, err
+	}
+	iJwt, err := jwt.NewImpl(jwtOptions, logger)
+	if err != nil {
+		return nil, err
+	}
+	authIBiz := auth.NewImpl(logger, repoIRepo, authenticatorAuthenticator, iJwt)
 	authIHandler := auth2.NewImpl(logger, authIBiz)
 	initHandlers := restful.CreateInitHandlerFn(iHandler, authIHandler)
 	engine := http.NewRouter(httpOptions, logger, initHandlers)

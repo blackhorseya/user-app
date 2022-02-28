@@ -12,7 +12,6 @@ type Profile struct {
 	Name         string             `json:"name" bson:"name"`
 	Nickname     string             `json:"nickname" bson:"nickname"`
 	Email        string             `json:"email" bson:"email"`
-	Roles        []string           `json:"roles" bson:"roles"`
 	Token        string             `json:"token" bson:"token"`
 	AccessToken  string             `json:"access_token" bson:"access_token"`
 	RefreshToken string             `json:"refresh_token" bson:"refresh_token"`
