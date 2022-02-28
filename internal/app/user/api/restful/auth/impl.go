@@ -1,7 +1,14 @@
 package auth
 
 import (
+	"encoding/base64"
+	"net/http"
+
+	"github.com/blackhorseya/gocommon/pkg/contextx"
+	"github.com/blackhorseya/gocommon/pkg/response"
+	"github.com/blackhorseya/gocommon/pkg/utils/randutil"
 	"github.com/blackhorseya/user-app/internal/app/user/biz/auth"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 
@@ -33,8 +40,21 @@ func NewImpl(logger *zap.Logger, biz auth.IBiz) IHandler {
 // @Failure 500 {object} er.APPError
 // @Router /v1/auth/login [get]
 func (i *impl) GetLoginURL(c *gin.Context) {
-	// todo: 2022-03-01|05:40|Sean|impl me
-	panic("implement me")
+	ctx := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)
+
+	state := base64.StdEncoding.EncodeToString([]byte(randutil.String(8)))
+
+	session := sessions.Default(c)
+	session.Set("state", state)
+	err := session.Save()
+	if err != nil {
+		_ = c.Error(err)
+		return
+	}
+
+	ret := i.biz.GetLoginURL(ctx, state)
+
+	c.JSON(http.StatusOK, response.OK.WithData(ret))
 }
 
 // Callback

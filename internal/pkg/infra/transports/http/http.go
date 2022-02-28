@@ -1,6 +1,7 @@
 package http
 
 import (
+	"encoding/gob"
 	"fmt"
 	"net/http"
 	"time"
@@ -8,6 +9,8 @@ import (
 	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/blackhorseya/gocommon/pkg/ginhttp"
 	"github.com/blackhorseya/gocommon/pkg/utils/netutil"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-contrib/static"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
@@ -57,6 +60,10 @@ func NewRouter(o *Options, logger *zap.Logger, init InitHandlers) *gin.Engine {
 	gin.SetMode(o.Mode)
 
 	r := gin.New()
+
+	gob.Register(map[string]interface{}{})
+	store := cookie.NewStore([]byte("secret"))
+	r.Use(sessions.Sessions("auth-session", store))
 
 	r.Use(ginhttp.AddCors())
 	r.Use(gin.Recovery())
