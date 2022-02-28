@@ -10,6 +10,7 @@ import (
 	"github.com/blackhorseya/user-app/internal/app/user/api/restful"
 	"github.com/blackhorseya/user-app/internal/pkg/app"
 	"github.com/blackhorseya/user-app/internal/pkg/infra/databases"
+	"github.com/blackhorseya/user-app/internal/pkg/infra/jwt"
 	"github.com/blackhorseya/user-app/internal/pkg/infra/transports/http"
 	"github.com/google/wire"
 )
@@ -20,6 +21,7 @@ var providerSet = wire.NewSet(
 	log.ProviderSet,
 	http.ProviderSet,
 	databases.ProviderSet,
+	jwt.ProviderSet,
 	restful.ProviderSet,
 )
 

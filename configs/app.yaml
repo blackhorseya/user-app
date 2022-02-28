@@ -1,6 +1,8 @@
 app:
   name: "user-app"
+  project: "sean-side"
   env: "local"
+  signature: "aH9vh6ZCS7tfUd4q"
 
 http:
   port: 8080

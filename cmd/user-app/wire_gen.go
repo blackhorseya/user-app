@@ -14,6 +14,7 @@ import (
 	"github.com/blackhorseya/user-app/internal/app/user/api/restful/health"
 	"github.com/blackhorseya/user-app/internal/pkg/app"
 	"github.com/blackhorseya/user-app/internal/pkg/infra/databases"
+	"github.com/blackhorseya/user-app/internal/pkg/infra/jwt"
 	"github.com/blackhorseya/user-app/internal/pkg/infra/transports/http"
 	"github.com/google/wire"
 )
@@ -57,4 +58,4 @@ func CreateApp(path2 string) (*app.Application, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(user.ProviderSet, config.ProviderSet, log.ProviderSet, http.ProviderSet, databases.ProviderSet, restful.ProviderSet)
+var providerSet = wire.NewSet(user.ProviderSet, config.ProviderSet, log.ProviderSet, http.ProviderSet, databases.ProviderSet, jwt.ProviderSet, restful.ProviderSet)
