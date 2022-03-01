@@ -11,6 +11,7 @@ on:
       - 'api/**'
       - 'configs/**'
       - 'scripts/**'
+      - 'web/**'
       - 'Makefile'
       - 'Dockerfile'
       - '.cz.yaml'
