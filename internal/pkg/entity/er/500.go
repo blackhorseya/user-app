@@ -32,4 +32,7 @@ var (
 
 	// ErrRegisterUser means Register user is failure.
 	ErrRegisterUser = er.NewAPPError(http.StatusInternalServerError, 50016, "Register user is failure.")
+
+	// ErrGetUserByToken means Get user by token is failure.
+	ErrGetUserByToken = er.NewAPPError(http.StatusInternalServerError, 50017, "Get user by token is failure.")
 )

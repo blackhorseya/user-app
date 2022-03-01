@@ -115,8 +115,13 @@ func (i *impl) Callback(ctx contextx.Contextx, code string) (info *user.Profile,
 }
 
 func (i *impl) GetUserByToken(ctx contextx.Contextx, token string) (info *user.Profile, err error) {
-	// todo: 2022-03-01|05:26|Sean|impl me
-	panic("implement me")
+	ret, err := i.repo.GetUserByToken(ctx, token)
+	if err != nil {
+		i.logger.Error(er.ErrGetUserByToken.Error(), zap.Error(err), zap.String("token", token))
+		return nil, er.ErrGetUserByToken
+	}
+
+	return ret, nil
 }
 
 func (i *impl) HasPermission(ctx contextx.Contextx, token, obj, act string) (bool, error) {

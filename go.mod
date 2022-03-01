@@ -3,7 +3,7 @@ module github.com/blackhorseya/user-app
 go 1.17
 
 require (
-	github.com/blackhorseya/gocommon v0.0.0-20220228071850-a2cf885d1c80
+	github.com/blackhorseya/gocommon v0.0.0-20220301084507-880eb54fda83
 	github.com/coreos/go-oidc/v3 v3.1.0
 	github.com/gin-contrib/sessions v0.0.4
 	github.com/gin-contrib/static v0.0.1

@@ -211,3 +211,51 @@ func (s *suiteBiz) Test_impl_Callback() {
 		})
 	}
 }
+
+func (s *suiteBiz) Test_impl_GetUserByToken() {
+	type args struct {
+		token string
+		mock  func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantInfo *user.Profile
+		wantErr  bool
+	}{
+		{
+			name: "get by token then error",
+			args: args{token: testdata.User1.Token, mock: func() {
+				s.mockRepo.On("GetUserByToken", mock.Anything, testdata.User1.Token).Return(nil, errors.New("error")).Once()
+			}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "get by token then success",
+			args: args{token: testdata.User1.Token, mock: func() {
+				s.mockRepo.On("GetUserByToken", mock.Anything, testdata.User1.Token).Return(testdata.User1, nil).Once()
+			}},
+			wantInfo: testdata.User1,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotInfo, err := s.biz.GetUserByToken(contextx.Background(), tt.args.token)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetUserByToken() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
+				t.Errorf("GetUserByToken() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
+			}
+
+			s.TearDownTest()
+		})
+	}
+}
