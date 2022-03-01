@@ -35,11 +35,13 @@ test-unit:
 build-image:
 	$(call check_defined,VERSION)
 	$(call check_defined,GITHUB_TOKEN)
+	$(call check_defined,DEPLOY_TO)
 	@docker build -t $(IMAGE_NAME):$(VERSION) \
 	--label "app.name=$(APP_NAME)" \
 	--label "app.version=$(VERSION)" \
 	--build-arg APP_NAME=$(APP_NAME) \
 	--build-arg GITHUB_TOKEN=$(GITHUB_TOKEN) \
+	--build-arg DEPLOY_TO=$(DEPLOY_TO) \
 	--platform linux/amd64 \
 	--pull --cache-from=$(IMAGE_NAME) \
 	-f Dockerfile .
