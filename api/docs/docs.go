@@ -155,6 +155,15 @@ var doc = `{
                     "Auth"
                 ],
                 "summary": "Get login url",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "redirect url after login success",
+                        "name": "redirect",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

@@ -8,13 +8,13 @@ import (
 	"github.com/blackhorseya/gocommon/pkg/response"
 	"github.com/blackhorseya/gocommon/pkg/utils/randutil"
 	"github.com/blackhorseya/user-app/internal/app/user/biz/auth"
+	cer "github.com/blackhorseya/user-app/internal/pkg/entity/er"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 
 	// import entity
 	_ "github.com/blackhorseya/gocommon/pkg/er"
-	_ "github.com/blackhorseya/gocommon/pkg/response"
 )
 
 type impl struct {
@@ -36,6 +36,7 @@ func NewImpl(logger *zap.Logger, biz auth.IBiz) IHandler {
 // @Tags Auth
 // @Accept application/json
 // @Produce application/json
+// @Param redirect query string true "redirect url after login success"
 // @Success 200 {object} response.Response{data=string}
 // @Failure 500 {object} er.APPError
 // @Router /v1/auth/login [get]
@@ -46,6 +47,7 @@ func (i *impl) GetLoginURL(c *gin.Context) {
 
 	session := sessions.Default(c)
 	session.Set("state", state)
+	session.Set("redirect", c.Query("redirect"))
 	err := session.Save()
 	if err != nil {
 		_ = c.Error(err)
@@ -67,8 +69,23 @@ func (i *impl) GetLoginURL(c *gin.Context) {
 // @Failure 500 {object} er.APPError
 // @Router /v1/auth/callback [get]
 func (i *impl) Callback(c *gin.Context) {
-	// todo: 2022-03-01|05:40|Sean|impl me
-	panic("implement me")
+	ctx := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)
+
+	session := sessions.Default(c)
+	if c.Query("state") != session.Get("state") {
+		_ = c.Error(cer.ErrInvalidState)
+		return
+	}
+
+	ret, err := i.biz.Callback(ctx, c.Query("code"))
+	if err != nil {
+		_ = c.Error(err)
+		return
+	}
+
+	redirect := session.Get("redirect").(string)
+
+	c.Redirect(http.StatusTemporaryRedirect, redirect+"?token="+ret.Token)
 }
 
 // Me
