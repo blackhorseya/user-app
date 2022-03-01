@@ -9,11 +9,11 @@ var (
 	// User1 user 1
 	User1 = &user.Profile{
 		ID:           primitive.ObjectID{},
-		OpenIds:      nil,
+		OpenIds:      map[string]string{"line": "line"},
 		Name:         "",
 		Nickname:     "",
 		Email:        "",
-		Token:        "",
+		Token:        "token",
 		AccessToken:  "",
 		RefreshToken: "",
 		PictureURL:   "",
