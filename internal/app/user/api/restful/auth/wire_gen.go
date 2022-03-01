@@ -14,7 +14,6 @@ import (
 
 import (
 	_ "github.com/blackhorseya/gocommon/pkg/er"
-	_ "github.com/blackhorseya/gocommon/pkg/response"
 )
 
 // Injectors from wire.go:

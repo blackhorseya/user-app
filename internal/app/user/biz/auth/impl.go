@@ -120,6 +120,10 @@ func (i *impl) GetUserByToken(ctx contextx.Contextx, token string) (info *user.P
 		i.logger.Error(er.ErrGetUserByToken.Error(), zap.Error(err), zap.String("token", token))
 		return nil, er.ErrGetUserByToken
 	}
+	if ret == nil {
+		i.logger.Error(er.ErrUserNotExists.Error())
+		return nil, er.ErrUserNotExists
+	}
 
 	return ret, nil
 }

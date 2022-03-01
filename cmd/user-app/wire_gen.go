@@ -15,9 +15,9 @@ import (
 	health2 "github.com/blackhorseya/user-app/internal/app/user/api/restful/health"
 	"github.com/blackhorseya/user-app/internal/app/user/biz"
 	"github.com/blackhorseya/user-app/internal/app/user/biz/auth"
-	repo2 "github.com/blackhorseya/user-app/internal/app/user/biz/auth/repo"
+	"github.com/blackhorseya/user-app/internal/app/user/biz/auth/repo"
 	"github.com/blackhorseya/user-app/internal/app/user/biz/health"
-	"github.com/blackhorseya/user-app/internal/app/user/biz/health/repo"
+	repo2 "github.com/blackhorseya/user-app/internal/app/user/biz/health/repo"
 	"github.com/blackhorseya/user-app/internal/pkg/app"
 	"github.com/blackhorseya/user-app/internal/pkg/infra/authenticator"
 	"github.com/blackhorseya/user-app/internal/pkg/infra/databases"
@@ -58,9 +58,6 @@ func CreateApp(path2 string) (*app.Application, error) {
 		return nil, err
 	}
 	iRepo := repo.NewImpl(logger, client)
-	iBiz := health.NewImpl(logger, iRepo)
-	iHandler := health2.NewImpl(logger, iBiz)
-	repoIRepo := repo2.NewImpl(logger, client)
 	authenticatorOptions, err := authenticator.NewOptions(viper, logger)
 	if err != nil {
 		return nil, err
@@ -77,9 +74,12 @@ func CreateApp(path2 string) (*app.Application, error) {
 	if err != nil {
 		return nil, err
 	}
-	authIBiz := auth.NewImpl(logger, repoIRepo, authenticatorAuthenticator, iJwt)
-	authIHandler := auth2.NewImpl(logger, authIBiz)
-	initHandlers := restful.CreateInitHandlerFn(iHandler, authIHandler)
+	iBiz := auth.NewImpl(logger, iRepo, authenticatorAuthenticator, iJwt)
+	repoIRepo := repo2.NewImpl(logger, client)
+	healthIBiz := health.NewImpl(logger, repoIRepo)
+	iHandler := health2.NewImpl(logger, healthIBiz)
+	authIHandler := auth2.NewImpl(logger, iBiz)
+	initHandlers := restful.CreateInitHandlerFn(iBiz, iHandler, authIHandler)
 	engine := http.NewRouter(httpOptions, logger, initHandlers)
 	server, err := http.New(httpOptions, logger, engine)
 	if err != nil {

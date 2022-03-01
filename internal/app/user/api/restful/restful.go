@@ -3,7 +3,9 @@ package restful
 import (
 	"github.com/blackhorseya/user-app/internal/app/user/api/restful/auth"
 	"github.com/blackhorseya/user-app/internal/app/user/api/restful/health"
+	authB "github.com/blackhorseya/user-app/internal/app/user/biz/auth"
 	"github.com/blackhorseya/user-app/internal/pkg/infra/transports/http"
+	"github.com/blackhorseya/user-app/internal/pkg/infra/transports/http/middlewares"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 	swaggerFiles "github.com/swaggo/files"
@@ -15,6 +17,7 @@ import (
 
 // CreateInitHandlerFn serve caller to create init handler
 func CreateInitHandlerFn(
+	authBiz authB.IBiz,
 	healthH health.IHandler,
 	authH auth.IHandler) http.InitHandlers {
 	return func(r *gin.Engine) {
@@ -32,6 +35,7 @@ func CreateInitHandlerFn(
 				{
 					authG.GET("login", authH.GetLoginURL)
 					authG.GET("callback", authH.Callback)
+					authG.GET("me", middlewares.RequiredAuth(authBiz), authH.Me)
 				}
 			}
 		}
