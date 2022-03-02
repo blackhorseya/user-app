@@ -53,7 +53,7 @@ jobs:
           password: ${{ secrets.GCR_JSON_KEY }}
       - name: Build and push image
         run: |
-          make build-image VERSION=$VERSION
+          make build-image VERSION=$VERSION GITHUB_TOKEN=$TOKEN DEPLOY_TO=prod
           make push-image VERSION=$VERSION
   deploy-prod:
     runs-on: ubuntu-latest
