@@ -85,7 +85,7 @@ gen-mocks:
 deploy:
 	$(call check_defined,DEPLOY_TO)
 	$(call check_defined,VERSION)
-	@helm -n $(NS) upgrade --install $(DEPLOY_TO)-$(RELEASE_NAME) \
+	@helm -n $(NS) upgrade --install $(DEPLOY_TO)-$(APP_NAME) \
 	$(HELM_REPO_NAME)/$(CHART_NAME) \
 	--set "image.tag=$(VERSION)" -f ./deployments/values/$(DEPLOY_TO)/values.yaml
 
