@@ -1,0 +1,3 @@
+[submodule "deployments/values"]
+	path = deployments/values
+	url = git@github.com:blackhorseya/user-app-values.git
