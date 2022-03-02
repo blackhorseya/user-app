@@ -37,7 +37,6 @@ func NewImpl(logger *zap.Logger, biz auth.IBiz) IHandler {
 // @Tags Auth
 // @Accept application/json
 // @Produce application/json
-// @Param redirect query string true "redirect url after login success"
 // @Success 200 {object} response.Response{data=string}
 // @Failure 500 {object} er.APPError
 // @Router /v1/auth/login [get]
@@ -48,7 +47,6 @@ func (i *impl) GetLoginURL(c *gin.Context) {
 
 	session := sessions.Default(c)
 	session.Set("state", state)
-	session.Set("redirect", c.Query("redirect"))
 	err := session.Save()
 	if err != nil {
 		_ = c.Error(err)
@@ -84,9 +82,7 @@ func (i *impl) Callback(c *gin.Context) {
 		return
 	}
 
-	redirect := session.Get("redirect").(string)
-
-	c.Redirect(http.StatusTemporaryRedirect, redirect+"?token="+ret.Token)
+	c.Redirect(http.StatusTemporaryRedirect, "https://"+c.Request.Host+"?token="+ret.Token)
 }
 
 // Me

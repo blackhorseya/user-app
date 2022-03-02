@@ -113,12 +113,6 @@ paths:
       consumes:
       - application/json
       description: Get login url
-      parameters:
-      - description: redirect url after login success
-        in: query
-        name: redirect
-        required: true
-        type: string
       produces:
       - application/json
       responses:
