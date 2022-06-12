@@ -23,11 +23,6 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
-      - name: Lint
-        run: |
-          go get -u golang.org/x/lint/golint
-          make lint
-          make report
       - name: Test
         run: |
           make test-unit
